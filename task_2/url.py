@@ -1,6 +1,8 @@
 import csv
 import requests
 
+CSV_FILE = 'urls.csv'
+
 def get_urls_from_csv(csv_file):
     """
     read the csv file and gets the urls
@@ -36,11 +38,7 @@ def get_status_code(url):
     except requests.exceptions.RequestException:
         print(f"(Error) {url}")
 
-def main():
-    """prints the status code and url from a csv file"""
-    csv_file='urls.csv'
-    for url in get_urls_from_csv(csv_file):
-        get_status_code(url)
 
 if __name__ == "__main__":
-    main()
+    for url in get_urls_from_csv(CSV_FILE):
+        get_status_code(url)
