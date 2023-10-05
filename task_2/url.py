@@ -5,7 +5,7 @@ CSV_FILE = 'urls.csv'
 
 def get_urls_from_csv(csv_file):
     """
-    read the csv file and gets the urls
+    reads the csv file and gets the urls
 
     Args:
         - csv_file : csv file containing urls to be read
