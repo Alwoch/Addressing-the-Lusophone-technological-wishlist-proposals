@@ -29,7 +29,7 @@ def get_status_code(url):
 
     Returns:
         - (STATUS CODE) URL : when a request is successfully made
-        - Error URL : when an a request fails
+        - (Error) URL : when an a request exception occurs
     """
     try:
         response = requests.get(url)
