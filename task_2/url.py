@@ -1,23 +1,7 @@
 import csv
 import requests
 
-CSV_FILE = 'urls.csv'
-
-def get_urls_from_csv(csv_file):
-    """
-    read the csv file and gets the urls
-
-    Args:
-        - csv_file : csv file containing urls to be read
-
-    Returns:
-        - url: url string
-    """
-    with open(csv_file, "r") as file:
-        csv_reader = csv.reader(file)
-        next(csv_reader)
-        for row in csv_reader:
-            yield row[0]
+CSV_FILE = "urls.csv"
 
 
 def get_status_code(url):
@@ -29,16 +13,36 @@ def get_status_code(url):
 
     Returns:
         - (STATUS CODE) URL : when a request is successfully made
-        - Error URL : when an a request fails
+        - (None) URL : when a request connection to the url fails
     """
     try:
         response = requests.get(url)
         status_code = response.status_code
-        print(f"({status_code}) {url}")
-    except requests.exceptions.RequestException:
-        print(f"(Error) {url}")
+    except requests.exceptions.RequestException as e:
+        # get the status code of the error if it provides a response
+        status_code = e.response.status_code if e.response else None
+
+    print(f"({status_code}) {url}")
+
+
+def process_csv(csv_file):
+    """
+    reads the csv file and prints its status codes and urls
+
+    Args:
+        - csv_file : csv file containing urls to be read
+
+    Returns:
+        - (STATUS CODE) URL : when a request is successfully made
+        - (Error) URL : when an a request exception occurs
+    """
+    with open(csv_file, "r") as file:
+        csv_reader = csv.reader(file)
+        next(csv_reader)
+        for row in csv_reader:
+            url = row[0]
+            get_status_code(url)
 
 
 if __name__ == "__main__":
-    for url in get_urls_from_csv(CSV_FILE):
-        get_status_code(url)
+    process_csv(CSV_FILE)
