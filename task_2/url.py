@@ -1,4 +1,6 @@
 import csv
+import concurrent.futures
+
 import requests
 
 CSV_FILE = "urls.csv"
@@ -34,14 +36,16 @@ def process_csv(csv_file):
 
     Returns:
         - (STATUS CODE) URL : when a request is successfully made
-        - (Error) URL : when an a request exception occurs
+        - (None) URL : when an a request connection to the url fails
     """
     with open(csv_file, "r") as file:
         csv_reader = csv.reader(file)
         next(csv_reader)
-        for row in csv_reader:
-            url = row[0]
-            get_status_code(url)
+
+        urls=[row[0] for row in csv_reader]
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+            executor.map(get_status_code, urls)
 
 
 if __name__ == "__main__":
